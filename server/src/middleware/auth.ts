@@ -26,9 +26,16 @@ const parseBearer = (authHeader?: string) => {
   return token;
 };
 
+const normalizeRole = (role?: string): UserRole => {
+  if (role === 'admin' || role === 'customer' || role === 'guest') {
+    return role;
+  }
+  return 'customer';
+};
+
 export const requireAuth = async (req: AuthRequest, _res: Response, next: NextFunction) => {
   try {
-    const devRole = (req.header('x-dev-role') as UserRole | undefined) || 'customer';
+    const devRole = normalizeRole(req.header('x-dev-role') || undefined);
     const devUid = req.header('x-dev-uid') || 'dev-user';
     const authHeader = req.header('authorization');
     const token = parseBearer(authHeader);
@@ -39,11 +46,13 @@ export const requireAuth = async (req: AuthRequest, _res: Response, next: NextFu
         return next(new HttpError(401, 'AUTH_INVALID', 'Unable to validate token'));
       }
 
+      const tokenRole: UserRole = (decoded as any)?.admin === true ? 'admin' : 'customer';
+
       req.user = {
         firebaseUid: decoded.uid,
         email: decoded.email,
         phone: decoded.phone_number,
-        role: devRole
+        role: env.jwtDevBypass ? devRole : tokenRole
       };
       return next();
     }

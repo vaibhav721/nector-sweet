@@ -2,16 +2,24 @@ import { useEffect, useState } from 'react';
 import { Button } from '../../components/Button';
 import { Card } from '../../components/Card';
 import { Select } from '../../components/Select';
+import { Toast } from '../../components/Toast';
 import { apiClient } from '../../lib/api';
 
 const statuses = ['PLACED', 'CONFIRMED', 'PACKING', 'OUT_FOR_DELIVERY', 'DELIVERED', 'CANCELLED'];
 
 export const AdminOrdersPage = () => {
   const [orders, setOrders] = useState<any[]>([]);
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
 
   const load = async () => {
-    const response = await apiClient.get('/admin/orders');
-    setOrders(response.data.data);
+    try {
+      const response = await apiClient.get('/admin/orders');
+      setOrders(response.data.data);
+      setError('');
+    } catch (err: any) {
+      setError(err.response?.data?.error?.message || 'Unable to load orders');
+    }
   };
 
   useEffect(() => {
@@ -21,6 +29,8 @@ export const AdminOrdersPage = () => {
   return (
     <div className="space-y-3">
       <h1 className="font-heading text-3xl">Orders Management</h1>
+      {error ? <Toast tone="error" message={error} /> : null}
+      {message ? <Toast tone="success" message={message} /> : null}
       {orders.map((order) => (
         <Card key={order._id}>
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -35,11 +45,17 @@ export const AdminOrdersPage = () => {
             <div className="flex items-center gap-2">
               <Select
                 defaultValue={order.status}
-                onChange={(event) =>
-                  apiClient.patch(`/admin/orders/${order._id}`, {
-                    status: event.target.value
-                  })
-                }
+                onChange={async (event) => {
+                  try {
+                    await apiClient.patch(`/admin/orders/${order._id}`, {
+                      status: event.target.value
+                    });
+                    setMessage('Order status updated');
+                    setError('');
+                  } catch (err: any) {
+                    setError(err.response?.data?.error?.message || 'Unable to update order status');
+                  }
+                }}
               >
                 {statuses.map((status) => (
                   <option key={status} value={status}>
@@ -50,10 +66,16 @@ export const AdminOrdersPage = () => {
               <Button
                 variant="ghost"
                 onClick={async () => {
-                  await apiClient.patch(`/admin/orders/${order._id}`, {
-                    paymentStatus: 'MANUAL_SETTLEMENT'
-                  });
-                  load();
+                  try {
+                    await apiClient.patch(`/admin/orders/${order._id}`, {
+                      paymentStatus: 'MANUAL_SETTLEMENT'
+                    });
+                    setMessage('Payment status updated');
+                    setError('');
+                    load();
+                  } catch (err: any) {
+                    setError(err.response?.data?.error?.message || 'Unable to update payment status');
+                  }
                 }}
               >
                 Mark Manual

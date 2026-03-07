@@ -22,3 +22,4 @@ npm run dev:mobile
 
 Detailed strategy, flows, schema, and extension plan:
 - `docs/NECTAR_SWEET_MVP_BLUEPRINT.md`
+- `docs/GOOGLE_PLAY_RELEASE_CHECKLIST.md`

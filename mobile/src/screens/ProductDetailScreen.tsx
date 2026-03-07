@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Button, Image, StyleSheet, Text, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Screen } from '../components/Screen';
 import { useMobileCart } from '../context/CartContext';
@@ -30,8 +30,19 @@ export const ProductDetailScreen = ({ route }: Props) => {
 
   return (
     <Screen>
+      {product.images?.[0] ? (
+        <Image
+          source={{ uri: `${process.env.EXPO_PUBLIC_API_BASE_URL}${product.images[0]}` }}
+          style={styles.image}
+          resizeMode="cover"
+        />
+      ) : (
+        <View style={[styles.image, styles.placeholder]}>
+          <Text style={styles.muted}>No Image</Text>
+        </View>
+      )}
       <Text style={styles.title}>{product.name}</Text>
-      <Text style={styles.muted}>{product.shortDescription}</Text>
+      <Text style={styles.description}>{product.shortDescription}</Text>
 
       {product.variants.map((variant: any) => (
         <View key={variant._id} style={styles.card}>
@@ -40,7 +51,7 @@ export const ProductDetailScreen = ({ route }: Props) => {
           <Text style={styles.muted}>Subscription Rs {variant.subscriptionPrice}</Text>
           <View style={styles.row}>
             <Button title="Add" onPress={() => addOneTime(variant._id)} />
-            <Button title="Subscribe" color="#1c6b4a" onPress={() => addSubscription(variant._id)} />
+            <Button title="Subscribe" color="#10b981" onPress={() => addSubscription(variant._id)} />
           </View>
         </View>
       ))}
@@ -49,9 +60,12 @@ export const ProductDetailScreen = ({ route }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  title: { fontSize: 28, fontWeight: '700' },
+  image: { width: '100%', height: 240, borderRadius: 14, backgroundColor: '#f3f4f6', marginBottom: 16 },
+  placeholder: { justifyContent: 'center', alignItems: 'center' },
+  title: { fontSize: 28, fontWeight: '700', marginBottom: 8 },
+  description: { color: '#6b665d', marginBottom: 24, fontSize: 16, lineHeight: 22 },
   muted: { color: '#6b665d' },
-  card: { backgroundColor: '#fff', borderRadius: 14, padding: 12, gap: 8 },
-  variant: { fontSize: 16, fontWeight: '600' },
-  row: { flexDirection: 'row', gap: 8 }
+  card: { backgroundColor: '#fff', borderRadius: 14, padding: 16, gap: 8, marginBottom: 16 },
+  variant: { fontSize: 18, fontWeight: '600' },
+  row: { flexDirection: 'row', gap: 8, marginTop: 8 }
 });

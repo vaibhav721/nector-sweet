@@ -1,15 +1,15 @@
 import { Link, NavLink } from 'react-router-dom';
-import { brandConfig } from '@nectar-sweet/shared';
 import { useAuth } from '../context/AuthContext';
+import { Logo } from './Logo';
 
 export const Navbar = () => {
   const { user } = useAuth();
 
   return (
-    <header className="sticky top-0 z-30 border-b border-neutral-200 bg-[rgba(252,250,247,0.95)] backdrop-blur">
+    <header className="sticky top-0 z-30 border-b border-neutral-100 bg-white/90 backdrop-blur-md transition-all">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:px-6">
-        <Link to="/" className="font-heading text-xl font-semibold">
-          {brandConfig.brandName}
+        <Link to="/" className="transition-opacity hover:opacity-90">
+          <Logo />
         </Link>
 
         <nav className="hidden items-center gap-6 text-sm font-semibold md:flex">

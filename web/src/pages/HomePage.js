@@ -1,0 +1,23 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { brandConfig, businessConfig, copyBlocks } from '@nectar-sweet/shared';
+import { Link } from 'react-router-dom';
+import { Badge } from '../components/Badge';
+import { Button } from '../components/Button';
+import { Card } from '../components/Card';
+const howItWorks = [
+    {
+        title: 'Choose your dairy',
+        description: 'Pick milk, curd, paneer, and ghee based on your routine.'
+    },
+    {
+        title: 'Select one-time or subscription',
+        description: 'Keep it flexible with daily, alternate-day, or custom schedules.'
+    },
+    {
+        title: 'Get carefully delivered',
+        description: 'Fresh local dairy at your doorstep in your selected service area.'
+    }
+];
+export const HomePage = () => {
+    return (_jsxs("div", { className: "space-y-16 py-8", children: [_jsxs("section", { className: "grid gap-12 rounded-3xl bg-neutral-50 p-8 md:grid-cols-[1.2fr_0.8fr] md:p-14", children: [_jsxs("div", { className: "flex flex-col justify-center space-y-6 animate-fade-slide-up", children: [_jsx("div", { children: _jsx(Badge, { children: "Fresh Local Dairy" }) }), _jsx("h1", { className: "font-heading text-4xl font-bold tracking-tight text-neutral-900 md:text-6xl md:leading-[1.1]", children: copyBlocks.heroTitle }), _jsx("p", { className: "max-w-xl text-lg tracking-tight text-neutral-600 md:text-xl", children: copyBlocks.heroSubtitle }), _jsxs("div", { className: "flex flex-wrap items-center gap-4 pt-4", children: [_jsx(Link, { to: "/shop", children: _jsx(Button, { className: "px-6 py-3 text-base", children: "Start Shopping" }) }), _jsx(Link, { to: "/subscription-planner", children: _jsx(Button, { variant: "secondary", className: "px-6 py-3 text-base bg-white shadow-sm hover:bg-neutral-50", children: "Plan Subscription" }) })] })] }), _jsxs(Card, { className: "flex flex-col justify-center space-y-5 border-none shadow-none bg-white/50 backdrop-blur-sm p-8", children: [_jsxs("div", { children: [_jsx("h3", { className: "font-heading text-2xl font-bold text-neutral-900", children: "Delivery Area" }), _jsxs("p", { className: "mt-1 text-neutral-500", children: ["Currently serving: ", businessConfig.launchCity] })] }), _jsx("div", { className: "grid grid-cols-2 gap-3 text-sm font-medium text-neutral-700", children: businessConfig.serviceCities[0].areas.slice(0, 6).map((area) => (_jsx("div", { className: "rounded-xl border border-neutral-100 bg-white p-3 text-center shadow-sm transition-colors hover:border-primary", children: area.label }, area.name))) }), _jsx(Link, { className: "inline-flex items-center text-sm font-semibold text-primary transition-colors hover:text-primary-hover", to: "/serviceability", children: "Check availability by pincode \u2192" })] })] }), _jsxs("section", { className: "space-y-6", children: [_jsx("h2", { className: "font-heading text-3xl font-bold tracking-tight text-neutral-900", children: copyBlocks.trustSectionTitle }), _jsx("div", { className: "grid gap-6 md:grid-cols-3", children: brandConfig.trustPillars.map((pillar) => (_jsxs("div", { className: "group rounded-2xl border border-neutral-100 bg-white p-6 shadow-sm transition-all hover:shadow-md", children: [_jsx("p", { className: "font-semibold text-neutral-900", children: pillar }), _jsx("p", { className: "mt-2 text-sm text-neutral-500 leading-relaxed", children: "A warm, local approach focused on daily consistency and value." })] }, pillar))) })] }), _jsx("section", { className: "grid gap-6 md:grid-cols-3", children: howItWorks.map((step, index) => (_jsxs("div", { className: "relative overflow-hidden rounded-2xl border border-neutral-100 bg-neutral-50 p-6", children: [_jsx("span", { className: "absolute -right-2 -top-4 text-7xl font-bold text-white/50", children: index + 1 }), _jsxs("div", { className: "relative z-10", children: [_jsx("h3", { className: "font-heading text-xl font-bold text-neutral-900", children: step.title }), _jsx("p", { className: "mt-2 text-sm text-neutral-600 leading-relaxed", children: step.description })] })] }, step.title))) }), _jsxs("section", { className: "rounded-3xl bg-neutral-900 px-8 py-12 text-center text-white shadow-lg sm:px-12 sm:py-16", children: [_jsx("h2", { className: "font-heading text-3xl font-bold tracking-tight sm:text-4xl text-white", children: "Subscription that adapts to your week" }), _jsx("p", { className: "mx-auto mt-4 max-w-2xl text-lg text-neutral-300", children: copyBlocks.subscriptionNote }), _jsx(Link, { to: "/subscription-planner", className: "mt-8 inline-block select-none rounded-xl bg-white px-6 py-3 font-semibold text-neutral-900 transition hover:bg-neutral-100 active:scale-95", children: "Explore subscription planner" })] })] }));
+};

@@ -55,11 +55,11 @@ export const CheckoutPage = () => {
 
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">Delivery slot</p>
-            <div className="mt-2 flex flex-wrap gap-2">
+            <div className="mt-3 flex flex-wrap gap-2">
               {preview.availableSlots.map((slot: any) => (
                 <button
                   key={slot.id}
-                  className={`rounded-full px-4 py-2 text-sm font-semibold ${slotId === slot.id ? 'bg-[var(--color-primary)] text-white' : 'bg-neutral-100 text-neutral-700'}`}
+                  className={`rounded-xl px-4 py-2 text-sm font-semibold transition-colors active:scale-95 ${slotId === slot.id ? 'bg-primary text-white shadow-sm' : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'}`}
                   onClick={() => setSlotId(slot.id)}
                 >
                   {slot.label}

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '../../components/Button';
 import { Card } from '../../components/Card';
 import { Input } from '../../components/Input';
+import { tokenStore } from '../../lib/tokenStore';
 
 export const AdminLoginPage = () => {
   const navigate = useNavigate();
@@ -19,9 +20,12 @@ export const AdminLoginPage = () => {
         <Button
           className="w-full"
           onClick={() => {
+            tokenStore.clear();
             localStorage.setItem('nectar_dev_role', 'admin');
             localStorage.setItem('nectar_dev_uid', 'admin-dev');
             localStorage.setItem('nectar_dev_email', email);
+            localStorage.removeItem('nectar_dev_phone');
+            localStorage.removeItem('nectar_pending_phone');
             navigate('/admin');
           }}
         >
