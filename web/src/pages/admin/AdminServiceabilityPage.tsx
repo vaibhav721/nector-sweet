@@ -3,6 +3,7 @@ import { Button } from '../../components/Button';
 import { Card } from '../../components/Card';
 import { Input } from '../../components/Input';
 import { Select } from '../../components/Select';
+import { Toast } from '../../components/Toast';
 import { apiClient } from '../../lib/api';
 
 export const AdminServiceabilityPage = () => {
@@ -10,21 +11,48 @@ export const AdminServiceabilityPage = () => {
   const [cityId, setCityId] = useState('');
   const [areaId, setAreaId] = useState('');
   const [pincode, setPincode] = useState('');
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
   const load = async () => {
-    const response = await apiClient.get('/admin/serviceability');
-    setData(response.data.data);
-    if (response.data.data.cities[0]) setCityId(response.data.data.cities[0]._id);
-    if (response.data.data.areas[0]) setAreaId(response.data.data.areas[0]._id);
+    try {
+      const response = await apiClient.get('/admin/serviceability');
+      const payload = response.data.data;
+      setData(payload);
+
+      if (payload.cities[0]) {
+        const nextCityId = String(payload.cities[0]._id);
+        setCityId(nextCityId);
+
+        const firstAreaForCity = payload.areas.find(
+          (area: any) => String(area.cityId) === String(nextCityId)
+        );
+        if (firstAreaForCity) {
+          setAreaId(String(firstAreaForCity._id));
+        }
+      }
+      setError('');
+    } catch (err: any) {
+      setError(err.response?.data?.error?.message || 'Unable to load serviceability records');
+    }
   };
 
   useEffect(() => {
     load();
   }, []);
 
+  useEffect(() => {
+    const firstAreaForCity = data.areas.find((area: any) => String(area.cityId) === String(cityId));
+    if (firstAreaForCity) {
+      setAreaId(String(firstAreaForCity._id));
+    }
+  }, [cityId, data.areas]);
+
   return (
     <div className="space-y-3">
       <h1 className="font-heading text-3xl">Serviceable Pin Code Management</h1>
+      {error ? <Toast tone="error" message={error} /> : null}
+      {message ? <Toast tone="success" message={message} /> : null}
       <Card className="space-y-2 md:max-w-xl">
         <p className="text-sm text-neutral-600">Add and control active pin codes.</p>
         <Select value={cityId} onChange={(event) => setCityId(event.target.value)}>
@@ -36,7 +64,7 @@ export const AdminServiceabilityPage = () => {
         </Select>
         <Select value={areaId} onChange={(event) => setAreaId(event.target.value)}>
           {data.areas
-            .filter((area: any) => area.cityId === cityId)
+            .filter((area: any) => String(area.cityId) === String(cityId))
             .map((area: any) => (
               <option key={area._id} value={area._id}>
                 {area.label}
@@ -46,15 +74,21 @@ export const AdminServiceabilityPage = () => {
         <Input placeholder="Pincode" value={pincode} onChange={(event) => setPincode(event.target.value)} />
         <Button
           onClick={async () => {
-            await apiClient.post('/admin/serviceability/pincodes', {
-              cityId,
-              areaId,
-              pincode,
-              etaLabel: 'Next day morning',
-              isActive: true
-            });
-            setPincode('');
-            load();
+            try {
+              await apiClient.post('/admin/serviceability/pincodes', {
+                cityId,
+                areaId,
+                pincode,
+                etaLabel: 'Next day morning',
+                isActive: true
+              });
+              setPincode('');
+              setMessage('Pincode added successfully');
+              setError('');
+              load();
+            } catch (err: any) {
+              setError(err.response?.data?.error?.message || 'Unable to add pincode');
+            }
           }}
         >
           Add pincode
@@ -71,10 +105,16 @@ export const AdminServiceabilityPage = () => {
             <Button
               variant="ghost"
               onClick={async () => {
-                await apiClient.patch(`/admin/serviceability/pincodes/${row._id}`, {
-                  isActive: !row.isActive
-                });
-                load();
+                try {
+                  await apiClient.patch(`/admin/serviceability/pincodes/${row._id}`, {
+                    isActive: !row.isActive
+                  });
+                  setMessage('Pincode status updated');
+                  setError('');
+                  load();
+                } catch (err: any) {
+                  setError(err.response?.data?.error?.message || 'Unable to update pincode');
+                }
               }}
             >
               Toggle

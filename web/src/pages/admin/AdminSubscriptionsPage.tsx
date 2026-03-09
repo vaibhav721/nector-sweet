@@ -1,14 +1,22 @@
 import { useEffect, useState } from 'react';
 import { Card } from '../../components/Card';
 import { Select } from '../../components/Select';
+import { Toast } from '../../components/Toast';
 import { apiClient } from '../../lib/api';
 
 export const AdminSubscriptionsPage = () => {
   const [subscriptions, setSubscriptions] = useState<any[]>([]);
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
 
   const load = async () => {
-    const response = await apiClient.get('/admin/subscriptions');
-    setSubscriptions(response.data.data);
+    try {
+      const response = await apiClient.get('/admin/subscriptions');
+      setSubscriptions(response.data.data);
+      setError('');
+    } catch (err: any) {
+      setError(err.response?.data?.error?.message || 'Unable to load subscriptions');
+    }
   };
 
   useEffect(() => {
@@ -18,6 +26,8 @@ export const AdminSubscriptionsPage = () => {
   return (
     <div className="space-y-3">
       <h1 className="font-heading text-3xl">Subscription Management</h1>
+      {error ? <Toast tone="error" message={error} /> : null}
+      {message ? <Toast tone="success" message={message} /> : null}
       {subscriptions.map((subscription) => (
         <Card key={subscription._id}>
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -29,11 +39,17 @@ export const AdminSubscriptionsPage = () => {
             </div>
             <Select
               defaultValue={subscription.status}
-              onChange={(event) =>
-                apiClient.patch(`/admin/subscriptions/${subscription._id}`, {
-                  status: event.target.value
-                })
-              }
+              onChange={async (event) => {
+                try {
+                  await apiClient.patch(`/admin/subscriptions/${subscription._id}`, {
+                    status: event.target.value
+                  });
+                  setMessage('Subscription status updated');
+                  setError('');
+                } catch (err: any) {
+                  setError(err.response?.data?.error?.message || 'Unable to update subscription status');
+                }
+              }}
             >
               <option value="ACTIVE">ACTIVE</option>
               <option value="PAUSED">PAUSED</option>

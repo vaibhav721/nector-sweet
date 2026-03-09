@@ -7,16 +7,21 @@ export const apiClient = axios.create({
 
 apiClient.interceptors.request.use((config) => {
   const token = tokenStore.get();
+  const devUid = localStorage.getItem('nectar_dev_uid');
+  const devRole = localStorage.getItem('nectar_dev_role');
+  const devEmail = localStorage.getItem('nectar_dev_email');
+  const devPhone = localStorage.getItem('nectar_dev_phone');
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
 
-  // Helpful local fallback when Firebase credentials are not configured.
-  if (!token) {
-    config.headers['x-dev-uid'] = localStorage.getItem('nectar_dev_uid') || 'dev-user';
-    config.headers['x-dev-role'] = localStorage.getItem('nectar_dev_role') || 'customer';
-    config.headers['x-dev-email'] = localStorage.getItem('nectar_dev_email') || 'customer@nectarsweet.com';
-    config.headers['x-dev-phone'] = localStorage.getItem('nectar_dev_phone') || '';
+  // Dev-role headers are sent when available, and always when no token exists.
+  if (devUid || devRole || !token) {
+    config.headers['x-dev-uid'] = devUid || 'dev-user';
+    config.headers['x-dev-role'] = devRole || 'customer';
+    config.headers['x-dev-email'] = devEmail || 'customer@nectarsweet.com';
+    config.headers['x-dev-phone'] = devPhone || '';
   }
 
   return config;

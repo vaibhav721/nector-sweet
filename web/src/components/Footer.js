@@ -1,0 +1,5 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { brandConfig } from '@nectar-sweet/shared';
+export const Footer = () => {
+    return (_jsx("footer", { className: "mt-16 border-t border-neutral-200 bg-white/70", children: _jsxs("div", { className: "mx-auto grid max-w-6xl gap-8 px-4 py-10 md:grid-cols-3 md:px-6", children: [_jsxs("div", { children: [_jsx("h4", { className: "font-heading text-xl", children: brandConfig.brandName }), _jsx("p", { className: "mt-2 text-sm text-neutral-600", children: brandConfig.tagline })] }), _jsxs("div", { children: [_jsx("h5", { className: "font-semibold", children: "Trust Pillars" }), _jsx("ul", { className: "mt-2 space-y-1 text-sm text-neutral-600", children: brandConfig.trustPillars.map((pillar) => (_jsx("li", { children: pillar }, pillar))) })] }), _jsxs("div", { children: [_jsx("h5", { className: "font-semibold", children: "Contact" }), _jsxs("p", { className: "mt-2 text-sm text-neutral-600", children: ["Phone: ", brandConfig.contact.phone] }), _jsxs("p", { className: "text-sm text-neutral-600", children: ["Email: ", brandConfig.contact.email] })] })] }) }));
+};

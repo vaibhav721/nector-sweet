@@ -3,11 +3,14 @@ import { Button } from '../../components/Button';
 import { Card } from '../../components/Card';
 import { Input } from '../../components/Input';
 import { Select } from '../../components/Select';
+import { Toast } from '../../components/Toast';
 import { apiClient } from '../../lib/api';
 
 export const AdminProductsPage = () => {
   const [products, setProducts] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
   const [newProduct, setNewProduct] = useState({
     categoryId: '',
     type: 'MILK',
@@ -17,15 +20,20 @@ export const AdminProductsPage = () => {
   });
 
   const load = async () => {
-    const [productsResponse, categoriesResponse] = await Promise.all([
-      apiClient.get('/admin/products'),
-      apiClient.get('/catalog/categories')
-    ]);
+    try {
+      const [productsResponse, categoriesResponse] = await Promise.all([
+        apiClient.get('/admin/products'),
+        apiClient.get('/catalog/categories')
+      ]);
 
-    setProducts(productsResponse.data.data);
-    setCategories(categoriesResponse.data.data);
-    if (!newProduct.categoryId && categoriesResponse.data.data[0]) {
-      setNewProduct((prev) => ({ ...prev, categoryId: categoriesResponse.data.data[0]._id }));
+      setProducts(productsResponse.data.data);
+      setCategories(categoriesResponse.data.data);
+      if (!newProduct.categoryId && categoriesResponse.data.data[0]) {
+        setNewProduct((prev) => ({ ...prev, categoryId: categoriesResponse.data.data[0]._id }));
+      }
+      setError('');
+    } catch (err: any) {
+      setError(err.response?.data?.error?.message || 'Unable to load admin products');
     }
   };
 
@@ -36,6 +44,8 @@ export const AdminProductsPage = () => {
   return (
     <div className="space-y-4">
       <h1 className="font-heading text-3xl">Product Management</h1>
+      {error ? <Toast tone="error" message={error} /> : null}
+      {message ? <Toast tone="success" message={message} /> : null}
       <Card className="space-y-2">
         <h2 className="font-semibold">Add product</h2>
         <Select
@@ -71,9 +81,15 @@ export const AdminProductsPage = () => {
         />
         <Button
           onClick={async () => {
-            await apiClient.post('/admin/products', newProduct);
-            setNewProduct({ ...newProduct, name: '', slug: '', shortDescription: '' });
-            load();
+            try {
+              await apiClient.post('/admin/products', newProduct);
+              setNewProduct({ ...newProduct, name: '', slug: '', shortDescription: '' });
+              setMessage('Product created successfully');
+              setError('');
+              load();
+            } catch (err: any) {
+              setError(err.response?.data?.error?.message || 'Unable to create product');
+            }
           }}
         >
           Create product
@@ -90,8 +106,14 @@ export const AdminProductsPage = () => {
             <Button
               variant="danger"
               onClick={async () => {
-                await apiClient.delete(`/admin/products/${product._id}`);
-                load();
+                try {
+                  await apiClient.delete(`/admin/products/${product._id}`);
+                  setMessage('Product archived');
+                  setError('');
+                  load();
+                } catch (err: any) {
+                  setError(err.response?.data?.error?.message || 'Unable to archive product');
+                }
               }}
             >
               Archive

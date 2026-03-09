@@ -36,50 +36,67 @@ export const ProductDetailPage = () => {
 
   return (
     <div className="grid gap-6 md:grid-cols-[1.1fr_0.9fr]">
-      <Card>
-        <h1 className="font-heading text-4xl">{product.name}</h1>
-        <p className="mt-3 text-neutral-600">{product.description || product.shortDescription}</p>
-        <div className="mt-6 space-y-3">
-          {product.variants.map((variant: any) => (
-            <div key={variant._id} className="rounded-xl border border-neutral-200 p-4">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <p className="font-semibold">{variant.name}</p>
-                  <p className="text-sm text-neutral-600">One-time Rs {variant.oneTimePrice}</p>
-                  <p className="text-sm text-[var(--color-primary)]">Subscribe Rs {variant.subscriptionPrice}</p>
-                  <p className="mt-1 text-xs text-neutral-500">
-                    Stock: {variant.inventory?.inStock ? 'Available' : 'Out of stock'}
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <Button
-                    className="w-24 text-xs"
-                    onClick={async () => {
-                      await addItem({ variantId: variant._id, quantity: 1, purchaseMode: 'ONE_TIME' });
-                      setToast('Added to cart');
-                    }}
-                  >
-                    Add
-                  </Button>
-                  <Button
-                    className="w-24 text-xs"
-                    variant="secondary"
-                    onClick={async () => {
-                      await addItem({
-                        variantId: variant._id,
-                        quantity: 1,
-                        purchaseMode: 'SUBSCRIPTION',
-                        frequency: 'DAILY'
-                      });
-                      setToast('Subscription item added');
-                    }}
-                  >
-                    Subscribe
-                  </Button>
+      <Card className="overflow-hidden p-0">
+        {product.images?.[0] ? (
+          <img
+            src={`${import.meta.env.VITE_API_BASE_URL}${product.images[0]}`}
+            alt={product.name}
+            className="h-64 w-full object-cover bg-neutral-100"
+          />
+        ) : (
+          <div className="h-48 w-full bg-neutral-100 flex items-center justify-center">
+            <span className="text-neutral-400 text-sm">No image</span>
+          </div>
+        )}
+        <div className="p-6">
+          <h1 className="font-heading text-4xl">{product.name}</h1>
+          <p className="mt-3 leading-relaxed text-neutral-600">{product.description || product.shortDescription}</p>
+          <div className="mt-8 space-y-4">
+            {product.variants.map((variant: any) => (
+              <div key={variant._id} className="rounded-xl border border-neutral-100 bg-neutral-50 p-5">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="font-semibold text-neutral-900">{variant.name}</p>
+                    <div className="mt-1 flex items-center gap-3">
+                      <p className="text-sm font-medium text-neutral-500">One-time Rs {variant.oneTimePrice}</p>
+                      <p className="rounded bg-primary/10 px-2 py-0.5 text-xs font-semibold text-primary">
+                        Subscribe Rs {variant.subscriptionPrice}
+                      </p>
+                    </div>
+                    <p className="mt-2 inline-block rounded-full bg-neutral-200/50 px-2 py-0.5 text-xs font-medium text-neutral-500">
+                      {variant.inventory?.inStock ? 'Available' : 'Out of stock'}
+                    </p>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <Button
+                      className="w-28 text-xs py-2 shadow-sm"
+                      onClick={async () => {
+                        await addItem({ variantId: variant._id, quantity: 1, purchaseMode: 'ONE_TIME' });
+                        setToast('Added to cart');
+                      }}
+                    >
+                      Add
+                    </Button>
+                    <Button
+                      className="w-28 text-xs py-2 shadow-none border border-primary/20 text-primary bg-white hover:bg-primary/5"
+                      variant="ghost"
+                      onClick={async () => {
+                        await addItem({
+                          variantId: variant._id,
+                          quantity: 1,
+                          purchaseMode: 'SUBSCRIPTION',
+                          frequency: 'DAILY'
+                        });
+                        setToast('Subscription item added');
+                      }}
+                    >
+                      Subscribe
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </Card>
 

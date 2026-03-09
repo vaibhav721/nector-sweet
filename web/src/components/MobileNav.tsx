@@ -17,7 +17,8 @@ export const MobileNav = () => {
             key={link.to}
             to={link.to}
             className={({ isActive }) =>
-              `py-3 text-center text-xs font-semibold ${isActive ? 'text-[var(--color-primary)]' : 'text-neutral-500'}`
+              `flex flex-col items-center justify-center py-3 text-xs font-semibold transition-colors active:scale-95 ${isActive ? 'text-[var(--color-primary)]' : 'text-neutral-500 hover:text-neutral-900'
+              }`
             }
           >
             {link.label}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Screen } from '../components/Screen';
@@ -26,6 +26,17 @@ export const ProductsScreen = () => {
       <Text style={styles.title}>Products</Text>
       {products.map((product) => (
         <View key={product._id} style={styles.card}>
+          {product.images?.[0] ? (
+            <Image
+              source={{ uri: `${process.env.EXPO_PUBLIC_API_BASE_URL}${product.images[0]}` }}
+              style={styles.image}
+              resizeMode="cover"
+            />
+          ) : (
+            <View style={[styles.image, styles.placeholder]}>
+              <Text style={styles.muted}>No Image</Text>
+            </View>
+          )}
           <TouchableOpacity onPress={() => navigation.navigate('ProductDetail', { slug: product.slug })}>
             <Text style={styles.productTitle}>{product.name}</Text>
             <Text style={styles.muted}>{product.shortDescription}</Text>
@@ -37,7 +48,7 @@ export const ProductsScreen = () => {
               <Button
                 title="Subscribe"
                 onPress={() => addSubscription(product.variants[0]._id)}
-                color="#1c6b4a"
+                color="#10b981"
               />
             </View>
           ) : null}
@@ -48,8 +59,10 @@ export const ProductsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  title: { fontSize: 26, fontWeight: '700' },
-  card: { backgroundColor: '#fff', borderRadius: 14, padding: 14, gap: 8 },
+  title: { fontSize: 26, fontWeight: '700', marginBottom: 16 },
+  card: { backgroundColor: '#fff', borderRadius: 14, padding: 14, gap: 12, marginBottom: 16 },
+  image: { width: '100%', height: 160, borderRadius: 8, backgroundColor: '#f3f4f6' },
+  placeholder: { justifyContent: 'center', alignItems: 'center' },
   productTitle: { fontSize: 18, fontWeight: '600' },
   muted: { color: '#6b665d' },
   row: { flexDirection: 'row', gap: 8 }

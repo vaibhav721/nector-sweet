@@ -3,10 +3,10 @@ import type { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger';
 
 const variantClasses: Record<Variant, string> = {
-  primary: 'bg-[var(--color-primary)] text-white hover:opacity-95',
-  secondary: 'bg-[var(--color-secondary)] text-[var(--color-text)] hover:brightness-95',
-  ghost: 'bg-white/60 text-[var(--color-text)] border border-neutral-200 hover:bg-white',
-  danger: 'bg-rose-600 text-white hover:bg-rose-700'
+  primary: 'bg-[var(--color-primary)] text-white hover:bg-[var(--color-accent)] active:scale-95 shadow-sm',
+  secondary: 'bg-neutral-100 text-neutral-900 hover:bg-neutral-200 active:scale-95',
+  ghost: 'bg-transparent text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 active:scale-95',
+  danger: 'bg-red-500 text-white hover:bg-red-600 active:scale-95 shadow-sm'
 };
 
 export const Button = ({

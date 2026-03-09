@@ -7,10 +7,22 @@ import { apiRouter } from './routes/index.js';
 
 export const createApp = () => {
   const app = express();
+  const localOriginRegex = /^https?:\/\/(localhost|127\.0\.0\.1):\d+$/;
+  const allowlist = new Set([env.webOrigin, env.mobileOrigin]);
 
   app.use(
     cors({
-      origin: [env.webOrigin, env.mobileOrigin],
+      origin(origin, callback) {
+        if (!origin) {
+          return callback(null, true);
+        }
+
+        if (allowlist.has(origin) || localOriginRegex.test(origin) || origin.startsWith('exp://')) {
+          return callback(null, true);
+        }
+
+        return callback(new Error(`Origin not allowed by CORS: ${origin}`));
+      },
       credentials: true
     })
   );
@@ -26,6 +38,9 @@ export const createApp = () => {
       }
     });
   });
+
+  // Serve static files (like placeholder images)
+  app.use(express.static('public'));
 
   app.use('/api', apiRouter);
 

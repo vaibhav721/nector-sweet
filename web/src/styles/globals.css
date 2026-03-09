@@ -1,15 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Lora:wght@500;600;700&family=Nunito+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --color-primary: #1c6b4a;
-  --color-secondary: #f8ebd4;
-  --color-accent: #d88c2d;
-  --color-background: #fcfaf7;
-  --color-text: #1e1a15;
+  --color-primary: #10b981;
+  --color-secondary: #f3f4f6;
+  --color-accent: #059669; /* Using darker primary as accent for simplicity */
+  --color-background: #ffffff;
+  --color-text: #111827;
 }
 
 * {
@@ -18,12 +18,9 @@
 
 body {
   margin: 0;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   color: var(--color-text);
-  background:
-    radial-gradient(circle at top right, #f7f1e6 0%, transparent 30%),
-    radial-gradient(circle at 10% 20%, #f2ede3 0%, transparent 25%),
-    var(--color-background);
+  background: var(--color-background);
   min-height: 100vh;
 }
 
