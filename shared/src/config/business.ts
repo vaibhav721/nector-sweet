@@ -1,4 +1,4 @@
-import type { BusinessConfig } from '../types/settings';
+import type { BusinessConfig } from '../types/settings.js';
 
 export const businessConfig: BusinessConfig = {
   launchCity: 'Lucknow',

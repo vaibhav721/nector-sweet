@@ -9,8 +9,7 @@
     "types": ["node"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@nectar-sweet/shared": ["../shared/src/index.ts"]
+      "@/*": ["src/*"]
     }
   },
   "include": ["src"]

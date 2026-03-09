@@ -1,4 +1,4 @@
-import type { SubscriptionFrequency, SubscriptionStatus } from './enums';
+import type { SubscriptionFrequency, SubscriptionStatus } from './enums.js';
 
 export interface Subscription {
   id: string;

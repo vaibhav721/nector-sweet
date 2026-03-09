@@ -16,6 +16,6 @@
     "lint": "npm run lint -w server && npm run lint -w web"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=20 <23"
   }
 }

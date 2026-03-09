@@ -1,4 +1,4 @@
-import type { BrandConfig } from '../types/settings';
+import type { BrandConfig } from '../types/settings.js';
 
 export const brandConfig: BrandConfig = {
   brandName: 'Nectar Sweet',

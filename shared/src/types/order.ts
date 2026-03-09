@@ -1,4 +1,4 @@
-import type { OrderStatus, PaymentStatus, PurchaseMode } from './enums';
+import type { OrderStatus, PaymentStatus, PurchaseMode } from './enums.js';
 
 export interface OrderItem {
   id: string;

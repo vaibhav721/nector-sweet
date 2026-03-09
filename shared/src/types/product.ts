@@ -1,4 +1,4 @@
-import type { ProductType } from './enums';
+import type { ProductType } from './enums.js';
 
 export interface Category {
   id: string;

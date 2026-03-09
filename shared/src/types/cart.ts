@@ -1,4 +1,4 @@
-import type { PurchaseMode, SubscriptionFrequency } from './enums';
+import type { PurchaseMode, SubscriptionFrequency } from './enums.js';
 
 export interface CartItem {
   id: string;
