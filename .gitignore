@@ -11,3 +11,4 @@ web/.vite
 mobile/.expo
 mobile/.expo-shared
 server/uploads
+*.md
